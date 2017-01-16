@@ -42,6 +42,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.github.kevinsawicki.wishlist.ViewFinder;
+import com.github.mobile.Intents;
 import com.github.mobile.R;
 import com.github.mobile.ui.LightProgressDialog;
 import com.github.mobile.ui.roboactivities.RoboActionBarActivity;
@@ -68,10 +69,10 @@ public class TwoFactorAuthActivity extends RoboActionBarActivity {
      * @return
      */
     public static Intent createIntent(Context context, String username, String password) {
-        Intent intent = new Intent(context, TwoFactorAuthActivity.class);
-        intent.putExtra(PARAM_USERNAME, username);
-        intent.putExtra(PARAM_PASSWORD, password);
-        return intent;
+        Intents.Builder builder = new Intents.Builder(context, TwoFactorAuthActivity.class);
+        builder.add(PARAM_USERNAME, username);
+        builder.add(PARAM_PASSWORD, password);
+        return builder.toIntent();
     }
 
     /**

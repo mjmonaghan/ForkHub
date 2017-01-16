@@ -37,6 +37,7 @@ import android.text.TextUtils;
 import android.util.Log;
 
 import com.github.mobile.DefaultClient;
+import com.github.mobile.Intents;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -70,11 +71,13 @@ class AccountAuthenticator extends AbstractAccountAuthenticator {
             final String accountType, final String authTokenType,
             final String[] requiredFeatures, final Bundle options)
             throws NetworkErrorException {
-        final Intent intent = new Intent(context, LoginActivity.class);
-        intent.putExtra(PARAM_AUTHTOKEN_TYPE, authTokenType);
-        intent.putExtra(KEY_ACCOUNT_AUTHENTICATOR_RESPONSE, response);
+
+        final Intents.Builder builder = new Intents.Builder(context, LoginActivity.class);
+
+        builder.add(PARAM_AUTHTOKEN_TYPE, authTokenType);
+        builder.add(KEY_ACCOUNT_AUTHENTICATOR_RESPONSE, response);
         final Bundle bundle = new Bundle();
-        bundle.putParcelable(KEY_INTENT, intent);
+        bundle.putParcelable(KEY_INTENT, builder.toIntent());
         return bundle;
     }
 
@@ -101,10 +104,10 @@ class AccountAuthenticator extends AbstractAccountAuthenticator {
     }
 
     private Intent createLoginIntent(final AccountAuthenticatorResponse response) {
-        final Intent intent = new Intent(context, LoginActivity.class);
-        intent.putExtra(PARAM_AUTHTOKEN_TYPE, ACCOUNT_TYPE);
-        intent.putExtra(KEY_ACCOUNT_AUTHENTICATOR_RESPONSE, response);
-        return intent;
+        final Intents.Builder builder = new Intents.Builder(context, LoginActivity.class);
+        builder.add(PARAM_AUTHTOKEN_TYPE, ACCOUNT_TYPE);
+        builder.add(KEY_ACCOUNT_AUTHENTICATOR_RESPONSE, response);
+        return builder.toIntent();
     }
 
     /**
@@ -200,13 +203,13 @@ class AccountAuthenticator extends AbstractAccountAuthenticator {
     public Bundle updateCredentials(
             final AccountAuthenticatorResponse response, final Account account,
             final String authTokenType, final Bundle options) {
-        final Intent intent = new Intent(context, LoginActivity.class);
-        intent.putExtra(PARAM_AUTHTOKEN_TYPE, authTokenType);
-        intent.putExtra(KEY_ACCOUNT_AUTHENTICATOR_RESPONSE, response);
+        final Intents.Builder builder = new Intents.Builder(context, LoginActivity.class);
+        builder.add(PARAM_AUTHTOKEN_TYPE, authTokenType);
+        builder.add(KEY_ACCOUNT_AUTHENTICATOR_RESPONSE, response);
         if (!TextUtils.isEmpty(account.name))
-            intent.putExtra(PARAM_USERNAME, account.name);
+            builder.add(PARAM_USERNAME, account.name);
         final Bundle bundle = new Bundle();
-        bundle.putParcelable(KEY_INTENT, intent);
+        bundle.putParcelable(KEY_INTENT, builder.toIntent());
         return bundle;
     }
 }
