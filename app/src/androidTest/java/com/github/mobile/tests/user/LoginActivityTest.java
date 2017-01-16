@@ -20,6 +20,7 @@ import android.view.View;
 import android.widget.EditText;
 
 import com.github.mobile.R;
+import com.github.mobile.accounts.AccountAuthenticatorState;
 import com.github.mobile.accounts.AccountUtils;
 import com.github.mobile.accounts.LoginActivity;
 import com.github.mobile.tests.ActivityTest;
@@ -40,7 +41,7 @@ public class LoginActivityTest extends ActivityTest<LoginActivity> {
      * Verify authenticator is registered
      */
     public void testHasAuthenticator() {
-        assertTrue(AccountUtils.hasAuthenticator(AccountManager
+        assertTrue(AccountAuthenticatorState.hasAuthenticator(AccountManager
                 .get(getActivity())));
     }
 
