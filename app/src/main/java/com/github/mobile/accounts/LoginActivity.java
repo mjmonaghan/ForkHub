@@ -63,6 +63,7 @@ import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
 
 import com.github.kevinsawicki.wishlist.ViewFinder;
+import com.github.mobile.Intents;
 import com.github.mobile.R;
 import com.github.mobile.persistence.AccountDataManager;
 import com.github.mobile.ui.LightProgressDialog;
@@ -407,13 +408,13 @@ public class LoginActivity extends RoboActionBarAccountAuthenticatorActivity {
      */
 
     protected void finishLogin(final String username, final String password) {
-        final Intent intent = new Intent();
-        intent.putExtra(KEY_ACCOUNT_NAME, username);
-        intent.putExtra(KEY_ACCOUNT_TYPE, ACCOUNT_TYPE);
+        final Intents.Builder builder = new Intents.Builder();
+        builder.add(KEY_ACCOUNT_NAME, username);
+        builder.add(KEY_ACCOUNT_TYPE, ACCOUNT_TYPE);
         if (ACCOUNT_TYPE.equals(authTokenType))
-            intent.putExtra(KEY_AUTHTOKEN, password);
-        setAccountAuthenticatorResult(intent.getExtras());
-        setResult(RESULT_OK, intent);
+            builder.add(KEY_AUTHTOKEN, password);
+        setAccountAuthenticatorResult(builder.toIntent().getExtras());
+        setResult(RESULT_OK, builder.toIntent());
         finish();
     }
 

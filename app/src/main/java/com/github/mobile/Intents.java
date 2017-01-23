@@ -196,15 +196,29 @@ public class Intents {
 
         private final Intent intent;
 
+        public Builder(){
+            intent = new Intent();
+        }
+
         /**
          * Create builder with suffix
          *
          * @param actionSuffix
          */
+
+
         public Builder(String actionSuffix) {
             // actionSuffix = e.g. "repos.VIEW"
             intent = new Intent(INTENT_PREFIX + actionSuffix);
         }
+
+
+        public Builder(android.content.Context packageContext, java.lang.Class<?> cls)
+        {
+            intent = new Intent(packageContext, cls);
+        }
+
+
 
         /**
          * Add repository id to intent being built up
@@ -356,6 +370,11 @@ public class Intents {
          * @return this builder
          */
         public Builder add(String fieldName, Serializable value) {
+            intent.putExtra(fieldName, value);
+            return this;
+        }
+
+        public Builder add(String fieldName, android.os.Parcelable value) {
             intent.putExtra(fieldName, value);
             return this;
         }

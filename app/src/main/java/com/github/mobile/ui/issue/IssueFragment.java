@@ -501,9 +501,7 @@ public class IssueFragment extends DialogFragment {
 
                 List<TimelineEvent> neededItems = new ArrayList<>(allItems.size());
                 for (TimelineEvent event : allItems) {
-                    if (shouldAddEvent(event, neededItems)) {
-                        neededItems.add(event);
-                    }
+                    addEventConditional(event, neededItems);
                 }
                 items = neededItems;
 
@@ -701,7 +699,7 @@ public class IssueFragment extends DialogFragment {
         }
     }
 
-    static private boolean shouldAddEvent(TimelineEvent event, List<TimelineEvent> allItems) {
+    static private boolean addEventConditional(TimelineEvent event, List<TimelineEvent> allItems) {
         // Exclude some events
         List<String> excludedEvents = Arrays.asList(
                 TimelineEvent.EVENT_MENTIONED,
@@ -729,9 +727,10 @@ public class IssueFragment extends DialogFragment {
         }
 
         int currentSize = allItems.size();
-        if (currentSize == 0)
+        if (currentSize == 0) {
+            allItems.add(event);
             return true;
-
+        }
         TimelineEvent previousItem = allItems.get(currentSize - 1);
 
         // Remove referenced event before a merge
@@ -739,6 +738,7 @@ public class IssueFragment extends DialogFragment {
                 TimelineEvent.EVENT_REFERENCED.equals((previousItem).event) &&
                 event.commit_id.equals((previousItem).commit_id)) {
             allItems.remove(currentSize - 1);
+            allItems.add(event);
             return true;
         }
 
@@ -746,7 +746,7 @@ public class IssueFragment extends DialogFragment {
         if (TimelineEvent.EVENT_CLOSED.equals(event.event) &&
                 TimelineEvent.EVENT_MERGED.equals((previousItem).event))
             return false;
-
+        allItems.add(event);
         return true;
     }
 }

@@ -27,6 +27,7 @@ import android.accounts.AccountsException;
 import android.accounts.AuthenticatorDescription;
 import android.accounts.AuthenticatorException;
 import android.accounts.OperationCanceledException;
+import com.github.mobile.accounts.AccountAuthenticatorState;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
@@ -55,10 +56,6 @@ public class AccountUtils {
 
     private static final String TAG = "AccountUtils";
 
-    private static boolean AUTHENTICATOR_CHECKED;
-
-    private static boolean HAS_AUTHENTICATOR;
-
     private static final AtomicInteger UPDATE_COUNT = new AtomicInteger(0);
 
     private static class AuthenticatorConflictException extends IOException {
@@ -66,30 +63,7 @@ public class AccountUtils {
         private static final long serialVersionUID = 641279204734869183L;
     }
 
-    /**
-     * Verify authenticator registered for account type matches the package name
-     * of this application
-     *
-     * @param manager
-     * @return true is authenticator registered, false otherwise
-     */
-    public static boolean hasAuthenticator(final AccountManager manager) {
-        if (!AUTHENTICATOR_CHECKED) {
-            final AuthenticatorDescription[] types = manager
-                    .getAuthenticatorTypes();
-            if (types != null && types.length > 0)
-                for (AuthenticatorDescription descriptor : types)
-                    if (descriptor != null
-                            && ACCOUNT_TYPE.equals(descriptor.type)) {
-                        HAS_AUTHENTICATOR = "jp.forkhub"
-                                .equals(descriptor.packageName);
-                        break;
-                    }
-            AUTHENTICATOR_CHECKED = true;
-        }
 
-        return HAS_AUTHENTICATOR;
-    }
 
     /**
      * Is the given user the owner of the default account?
@@ -205,7 +179,7 @@ public class AccountUtils {
 
         Account[] accounts;
         try {
-            if (!hasAuthenticator(manager))
+            if (!AccountAuthenticatorState.hasAuthenticator(manager))
                 throw new AuthenticatorConflictException();
 
             while ((accounts = getAccounts(manager)).length == 0) {
@@ -264,7 +238,7 @@ public class AccountUtils {
 
             AccountManager manager = AccountManager.get(activity);
             try {
-                if (!hasAuthenticator(manager))
+                if (!AccountAuthenticatorState.hasAuthenticator(manager))
                     throw new AuthenticatorConflictException();
                 manager.updateCredentials(account, ACCOUNT_TYPE, null,
                         activity, null, null).getResult();
