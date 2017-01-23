@@ -34,7 +34,7 @@ import org.eclipse.egit.github.core.service.CommitService;
 /**
  * Task to comment on a commit
  */
-public class CreateCommitCommentTask extends ProgressDialogTask<Comment> implements CreateCommentTask{
+public class CreateCommitCommentTask extends ProgressDialogTask<CommitComment> implements CreateCommentTask{
 
     private static final String TAG = "CreateCommentTask";
 
