@@ -27,7 +27,7 @@ import android.text.TextUtils;
 import com.github.mobile.Intents.Builder;
 import com.github.mobile.R;
 import com.github.mobile.core.commit.CommitUtils;
-import com.github.mobile.core.commit.CreateCommentTask;
+import com.github.mobile.core.commit.CreateCommitCommentTask;
 import com.github.mobile.ui.comment.CommentPreviewPagerAdapter;
 
 import org.eclipse.egit.github.core.CommitComment;
@@ -103,7 +103,7 @@ public class CreateCommentActivity extends
         commitComment.setBody(comment);
         if (isLineComment(path, position))
             commitComment.setPath(path).setPosition(position);
-        new CreateCommentTask(this, repository, commit, commitComment) {
+        new CreateCommitCommentTask(this, repository, commit, commitComment) {
 
             @Override
             protected void onSuccess(CommitComment comment) throws Exception {

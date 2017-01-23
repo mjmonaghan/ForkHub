@@ -21,6 +21,7 @@ import android.content.Context;
 import android.util.Log;
 
 import com.github.mobile.R;
+import com.github.mobile.core.CreateCommentTask;
 import com.github.mobile.ui.ProgressDialogTask;
 import com.github.mobile.util.HtmlUtils;
 import com.github.mobile.util.ToastUtils;
@@ -33,7 +34,7 @@ import org.eclipse.egit.github.core.service.IssueService;
 /**
  * Task to comment on an issue in a repository
  */
-public class CreateCommentTask extends ProgressDialogTask<Comment> {
+public class CreateIssueCommentTask extends ProgressDialogTask<Comment> implements CreateCommentTask{
 
     private static final String TAG = "CreateCommentTask";
 
@@ -55,7 +56,7 @@ public class CreateCommentTask extends ProgressDialogTask<Comment> {
      * @param issueNumber
      * @param comment
      */
-    public CreateCommentTask(final Context context,
+    public CreateIssueCommentTask(final Context context,
             final IRepositoryIdProvider repository, final int issueNumber,
             final String comment) {
         super(context);
@@ -66,7 +67,7 @@ public class CreateCommentTask extends ProgressDialogTask<Comment> {
     }
 
     @Override
-    protected Comment run(Account account) throws Exception {
+    public Comment run(Account account) throws Exception {
         Comment created = service.createComment(repository, issueNumber,
                 comment);
         String formatted = HtmlUtils.format(created.getBodyHtml()).toString();
@@ -79,15 +80,14 @@ public class CreateCommentTask extends ProgressDialogTask<Comment> {
      *
      * @return this task
      */
-    public CreateCommentTask start() {
+    public CreateIssueCommentTask start() {
         showIndeterminate(R.string.creating_comment);
-
         execute();
         return this;
     }
 
     @Override
-    protected void onException(Exception e) throws RuntimeException {
+    public void onException(Exception e) throws RuntimeException {
         super.onException(e);
 
         Log.d(TAG, "Exception creating comment on issue", e);

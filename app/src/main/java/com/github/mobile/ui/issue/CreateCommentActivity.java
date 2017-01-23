@@ -26,7 +26,7 @@ import android.support.v7.app.ActionBar;
 
 import com.github.mobile.Intents.Builder;
 import com.github.mobile.R;
-import com.github.mobile.core.issue.CreateCommentTask;
+import com.github.mobile.core.issue.CreateIssueCommentTask;
 import com.github.mobile.core.issue.EditCommentTask;
 import com.github.mobile.ui.comment.CommentPreviewPagerAdapter;
 
@@ -109,7 +109,7 @@ public class CreateCommentActivity extends
                 }
             }.start();
         } else {
-            new CreateCommentTask(this, repositoryId, issueNumber, commentText) {
+            new CreateIssueCommentTask(this, repositoryId, issueNumber, commentText) {
 
                 @Override
                 protected void onSuccess(Comment comment) throws Exception {

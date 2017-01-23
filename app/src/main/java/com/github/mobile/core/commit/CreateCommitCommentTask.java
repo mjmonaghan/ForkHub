@@ -13,47 +13,55 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.mobile.core.gist;
+package com.github.mobile.core.commit;
 
 import android.accounts.Account;
 import android.app.Activity;
 import android.util.Log;
 
 import com.github.mobile.R;
+import com.github.mobile.core.CreateCommentTask;
 import com.github.mobile.ui.ProgressDialogTask;
 import com.github.mobile.util.HtmlUtils;
 import com.github.mobile.util.ToastUtils;
 import com.google.inject.Inject;
 
 import org.eclipse.egit.github.core.Comment;
-import org.eclipse.egit.github.core.Gist;
-import org.eclipse.egit.github.core.service.GistService;
+import org.eclipse.egit.github.core.CommitComment;
+import org.eclipse.egit.github.core.IRepositoryIdProvider;
+import org.eclipse.egit.github.core.service.CommitService;
 
 /**
- * Task to comment on a {@link Gist}
+ * Task to comment on a commit
  */
-public class CreateCommentTask extends ProgressDialogTask<Comment> {
+public class CreateCommitCommentTask extends ProgressDialogTask<Comment> implements CreateCommentTask{
 
     private static final String TAG = "CreateCommentTask";
 
     @Inject
-    private GistService service;
+    private CommitService service;
 
-    private final String id;
+    private final IRepositoryIdProvider repository;
 
-    private final String comment;
+    private final String commit;
+
+    private final CommitComment comment;
 
     /**
      * Create task to create a comment
      *
      * @param activity
-     * @param gistId
+     * @param repository
+     * @param commit
      * @param comment
      */
-    protected CreateCommentTask(Activity activity, String gistId, String comment) {
+    protected CreateCommitCommentTask(final Activity activity,
+            final IRepositoryIdProvider repository, final String commit,
+            final CommitComment comment) {
         super(activity);
 
-        this.id = gistId;
+        this.repository = repository;
+        this.commit = commit;
         this.comment = comment;
     }
 
@@ -62,25 +70,26 @@ public class CreateCommentTask extends ProgressDialogTask<Comment> {
      *
      * @return this task
      */
-    public CreateCommentTask start() {
+    public CreateCommitCommentTask start() {
         showIndeterminate(R.string.creating_comment);
         execute();
         return this;
     }
 
     @Override
-    public Comment run(Account account) throws Exception {
-        Comment created = service.createComment(id, comment);
+    public CommitComment run(final Account account) throws Exception {
+        CommitComment created = service.addComment(repository, commit, comment);
         String formatted = HtmlUtils.format(created.getBodyHtml()).toString();
         created.setBodyHtml(formatted);
         return created;
+
     }
 
     @Override
-    protected void onException(Exception e) throws RuntimeException {
+    public void onException(final Exception e) throws RuntimeException {
         super.onException(e);
 
-        Log.d(TAG, "Exception creating comment on gist", e);
+        Log.d(TAG, "Exception creating comment on commit", e);
 
         ToastUtils.show((Activity) getContext(), e.getMessage());
     }

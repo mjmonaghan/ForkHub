@@ -22,7 +22,7 @@ import android.support.v7.app.ActionBar;
 
 import com.github.mobile.Intents.Builder;
 import com.github.mobile.R;
-import com.github.mobile.core.gist.CreateCommentTask;
+import com.github.mobile.core.gist.CreateGistCommentTask;
 
 import org.eclipse.egit.github.core.Comment;
 import org.eclipse.egit.github.core.Gist;
@@ -64,7 +64,7 @@ public class CreateCommentActivity extends
 
     @Override
     protected void createComment(String comment) {
-        new CreateCommentTask(this, gist.getId(), comment) {
+        new CreateGistCommentTask(this, gist.getId(), comment) {
 
             @Override
             protected void onSuccess(Comment comment) throws Exception {
