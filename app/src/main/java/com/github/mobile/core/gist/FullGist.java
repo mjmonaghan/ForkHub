@@ -25,13 +25,15 @@ import org.eclipse.egit.github.core.Gist;
 /**
  * Gist model with comments and starred status
  */
-public class FullGist extends ArrayList<Comment> implements Serializable {
+public class FullGist implements Serializable {
 
     private static final long serialVersionUID = -5966699489498437000L;
 
     private final Gist gist;
 
     private final boolean starred;
+
+    private ArrayList<Comment> comments;
 
     /**
      * Create gist with comments
@@ -42,8 +44,7 @@ public class FullGist extends ArrayList<Comment> implements Serializable {
      */
     public FullGist(final Gist gist, final boolean starred,
             final Collection<Comment> comments) {
-        super(comments);
-
+        this.comments = new ArrayList<Comment>(comments);
         this.starred = starred;
         this.gist = gist;
     }
@@ -69,4 +70,6 @@ public class FullGist extends ArrayList<Comment> implements Serializable {
     public Gist getGist() {
         return gist;
     }
+
+    public ArrayList<Comment> getComments(){return comments; }
 }
