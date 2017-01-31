@@ -41,13 +41,14 @@ public class TeamPagerAdapter extends FragmentPagerAdapter {
 
     @Override
     public Fragment getItem(final int position) {
-        require(position < getCount());
+        require(0 <= position && position < getCount());
         switch (position) {
         case 0:
             return new TeamMembersFragment();
         case 1:
             return new TeamRepositoryListFragment();
         default:
+            neverGetHere();
             return null;
         }
     }
@@ -59,13 +60,14 @@ public class TeamPagerAdapter extends FragmentPagerAdapter {
 
     @Override
     public CharSequence getPageTitle(int position) {
-        require(position < getCount());
+        require(0 <= position && position < getCount());
         switch (position) {
         case 0:
             return resources.getString(R.string.tab_members);
         case 1:
             return resources.getString(R.string.tab_repositories);
         default:
+            neverGetHere();
             return null;
         }
     }

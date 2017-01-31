@@ -66,7 +66,7 @@ public class RepositoryPagerAdapter extends FragmentPagerAdapter {
 
     @Override
     public CharSequence getPageTitle(int position) {
-        require(position < getCount());
+        require(0 <= position && position < getCount());
         switch (position) {
         case 0:
             return resources.getString(R.string.tab_news);
@@ -77,13 +77,14 @@ public class RepositoryPagerAdapter extends FragmentPagerAdapter {
         case 3:
             return hasIssues ? resources.getString(R.string.tab_issues) : resources.getString(R.string.tab_pull_requests);
         default:
+            neverGetHere();
             return null;
         }
     }
 
     @Override
     public Fragment getItem(int position) {
-        require(position < getCount());
+        require(0 <= position && position < getCount());
         switch (position) {
         case 0:
             return new RepositoryNewsFragment();
@@ -96,6 +97,7 @@ public class RepositoryPagerAdapter extends FragmentPagerAdapter {
         case 3:
             return new IssuesFragment();
         default:
+            neverGetHere();
             return null;
         }
     }

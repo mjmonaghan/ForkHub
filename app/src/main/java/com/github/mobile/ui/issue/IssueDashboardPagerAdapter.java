@@ -64,7 +64,7 @@ public class IssueDashboardPagerAdapter extends FragmentStatePagerAdapter {
 
     @Override
     public Fragment getItem(final int position) {
-        require(position < getCount());
+        require(0 <= position && position < getCount());
         String filter = "is:open ";
         switch (position) {
         case 0:
@@ -77,6 +77,7 @@ public class IssueDashboardPagerAdapter extends FragmentStatePagerAdapter {
             filter += "mentions:" + loggedUser;
             break;
         default:
+            neverGetHere();
             return null;
         }
         final Map<String, String> filterData = new HashMap<String, String>();
@@ -92,7 +93,7 @@ public class IssueDashboardPagerAdapter extends FragmentStatePagerAdapter {
 
     @Override
     public CharSequence getPageTitle(final int position) {
-        require(position < getCount());
+        require(0 <= position && position < getCount());
         switch (position) {
         case 0:
             return resources.getString(R.string.tab_created);
@@ -101,6 +102,7 @@ public class IssueDashboardPagerAdapter extends FragmentStatePagerAdapter {
         case 2:
             return resources.getString(R.string.tab_mentioned);
         default:
+            neverGetHere();
             return null;
         }
     }

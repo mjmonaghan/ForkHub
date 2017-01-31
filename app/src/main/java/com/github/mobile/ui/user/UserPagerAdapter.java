@@ -56,7 +56,7 @@ public class UserPagerAdapter extends FragmentPagerAdapter {
 
     @Override
     public Fragment getItem(final int position) {
-        require(position < getCount());
+        require(0 <= position && position < getCount());
         switch (position) {
         case TAB_ACTIVITY:
             return new UserCreatedNewsFragment();
@@ -69,6 +69,7 @@ public class UserPagerAdapter extends FragmentPagerAdapter {
         case TAB_FOLLOWEES:
             return new UserFollowingFragment();
         default:
+            neverGetHere();
             return null;
         }
     }
@@ -83,7 +84,7 @@ public class UserPagerAdapter extends FragmentPagerAdapter {
 
     @Override
     public CharSequence getPageTitle(int position) {
-        require(position < getCount());
+        require(0 <= position && position < getCount());
         switch (position) {
         case TAB_ACTIVITY:
             return resources.getString(R.string.tab_news);
@@ -96,6 +97,7 @@ public class UserPagerAdapter extends FragmentPagerAdapter {
         case TAB_FOLLOWEES:
             return resources.getString(R.string.tab_following);
         default:
+            neverGetHere();
             return null;
         }
     }

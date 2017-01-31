@@ -57,7 +57,7 @@ public class CommentPreviewPagerAdapter extends FragmentPagerAdapter {
 
     @Override
     public Fragment getItem(final int position) {
-        require(position < getCount());
+        require(0 <= position && position < getCount());
         switch (position) {
         case 0:
             textFragment = new RawCommentFragment();
@@ -67,6 +67,7 @@ public class CommentPreviewPagerAdapter extends FragmentPagerAdapter {
             htmlFragment = new RenderedCommentFragment();
             return htmlFragment;
         default:
+            neverGetHere();
             return null;
         }
     }

@@ -44,26 +44,28 @@ public class SearchPagerAdapter extends FragmentPagerAdapter {
 
     @Override
     public CharSequence getPageTitle(int position) {
-        require(position < getCount());
+        require(0 <= position && position < getCount());
         switch (position) {
         case 0:
             return resources.getString(R.string.tab_repositories);
         case 1:
             return resources.getString(R.string.tab_users);
         default:
+            neverGetHere();
             return null;
         }
     }
 
     @Override
     public Fragment getItem(int position) {
-        require(position < getCount());
+        require(0 <= position && position < getCount());
         switch (position) {
         case 0:
             return new SearchRepositoryListFragment();
         case 1:
             return new SearchUserListFragment();
         default:
+            neverGetHere();
             return null;
         }
     }
