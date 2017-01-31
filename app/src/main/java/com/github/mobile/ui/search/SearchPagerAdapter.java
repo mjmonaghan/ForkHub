@@ -22,6 +22,8 @@ import android.support.v7.app.AppCompatActivity;
 import com.github.mobile.R;
 import com.github.mobile.ui.FragmentPagerAdapter;
 
+import static org.valid4j.Assertive.*;
+
 /**
  * Adapter to view various pages of search screen
  */
@@ -42,6 +44,7 @@ public class SearchPagerAdapter extends FragmentPagerAdapter {
 
     @Override
     public CharSequence getPageTitle(int position) {
+        require(position < getCount());
         switch (position) {
         case 0:
             return resources.getString(R.string.tab_repositories);
@@ -54,6 +57,7 @@ public class SearchPagerAdapter extends FragmentPagerAdapter {
 
     @Override
     public Fragment getItem(int position) {
+        require(position < getCount());
         switch (position) {
         case 0:
             return new SearchRepositoryListFragment();

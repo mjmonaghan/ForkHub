@@ -25,6 +25,7 @@ import com.github.mobile.ui.FragmentPagerAdapter;
 import com.github.mobile.ui.code.RepositoryCodeFragment;
 import com.github.mobile.ui.commit.CommitListFragment;
 import com.github.mobile.ui.issue.IssuesFragment;
+import static org.valid4j.Assertive.*;
 
 /**
  * Adapter to view a repository's various pages
@@ -65,6 +66,7 @@ public class RepositoryPagerAdapter extends FragmentPagerAdapter {
 
     @Override
     public CharSequence getPageTitle(int position) {
+        require(position < getCount());
         switch (position) {
         case 0:
             return resources.getString(R.string.tab_news);
@@ -81,6 +83,7 @@ public class RepositoryPagerAdapter extends FragmentPagerAdapter {
 
     @Override
     public Fragment getItem(int position) {
+        require(position < getCount());
         switch (position) {
         case 0:
             return new RepositoryNewsFragment();

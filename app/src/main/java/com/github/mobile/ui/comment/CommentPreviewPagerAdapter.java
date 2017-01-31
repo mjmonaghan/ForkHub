@@ -23,6 +23,7 @@ import com.github.mobile.R;
 import com.github.mobile.ui.FragmentPagerAdapter;
 
 import org.eclipse.egit.github.core.IRepositoryIdProvider;
+import static org.valid4j.Assertive.*;
 
 /**
  * Pager of a raw and rendered comment text
@@ -56,6 +57,7 @@ public class CommentPreviewPagerAdapter extends FragmentPagerAdapter {
 
     @Override
     public Fragment getItem(final int position) {
+        require(position < getCount());
         switch (position) {
         case 0:
             textFragment = new RawCommentFragment();

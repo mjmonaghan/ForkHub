@@ -20,6 +20,7 @@ import static com.github.mobile.ui.user.UserViewActivity.TAB_FOLLOWEES;
 import static com.github.mobile.ui.user.UserViewActivity.TAB_FOLLOWERS;
 import static com.github.mobile.ui.user.UserViewActivity.TAB_REPOSITORIES;
 import static com.github.mobile.ui.user.UserViewActivity.TAB_STARS;
+import static org.valid4j.Assertive.*;
 
 import android.content.res.Resources;
 import android.support.v4.app.Fragment;
@@ -55,6 +56,7 @@ public class UserPagerAdapter extends FragmentPagerAdapter {
 
     @Override
     public Fragment getItem(final int position) {
+        require(position < getCount());
         switch (position) {
         case TAB_ACTIVITY:
             return new UserCreatedNewsFragment();
@@ -81,6 +83,7 @@ public class UserPagerAdapter extends FragmentPagerAdapter {
 
     @Override
     public CharSequence getPageTitle(int position) {
+        require(position < getCount());
         switch (position) {
         case TAB_ACTIVITY:
             return resources.getString(R.string.tab_news);

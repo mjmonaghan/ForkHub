@@ -21,6 +21,7 @@ import android.support.v7.app.AppCompatActivity;
 
 import com.github.mobile.R;
 import com.github.mobile.ui.FragmentPagerAdapter;
+import static org.valid4j.Assertive.*;
 
 /**
  * Pager adapter for a team's different views
@@ -40,6 +41,7 @@ public class TeamPagerAdapter extends FragmentPagerAdapter {
 
     @Override
     public Fragment getItem(final int position) {
+        require(position < getCount());
         switch (position) {
         case 0:
             return new TeamMembersFragment();
@@ -57,6 +59,7 @@ public class TeamPagerAdapter extends FragmentPagerAdapter {
 
     @Override
     public CharSequence getPageTitle(int position) {
+        require(position < getCount());
         switch (position) {
         case 0:
             return resources.getString(R.string.tab_members);

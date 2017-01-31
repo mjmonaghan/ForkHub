@@ -21,6 +21,8 @@ import static org.eclipse.egit.github.core.service.IssueService.FIELD_DIRECTION;
 import static org.eclipse.egit.github.core.service.IssueService.FIELD_FILTER;
 import static org.eclipse.egit.github.core.service.IssueService.FIELD_SORT;
 import static org.eclipse.egit.github.core.service.IssueService.SORT_UPDATED;
+import static org.valid4j.Assertive.*;
+
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -62,6 +64,7 @@ public class IssueDashboardPagerAdapter extends FragmentStatePagerAdapter {
 
     @Override
     public Fragment getItem(final int position) {
+        require(position < getCount());
         String filter = "is:open ";
         switch (position) {
         case 0:
@@ -89,6 +92,7 @@ public class IssueDashboardPagerAdapter extends FragmentStatePagerAdapter {
 
     @Override
     public CharSequence getPageTitle(final int position) {
+        require(position < getCount());
         switch (position) {
         case 0:
             return resources.getString(R.string.tab_created);
