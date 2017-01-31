@@ -26,6 +26,7 @@ import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.eclipse.egit.github.core.IResourceProvider;
 import org.eclipse.egit.github.core.client.GitHubClient;
@@ -132,17 +133,25 @@ public class SearchUserService extends UserService {
      * @throws IOException
      */
     public List<SearchUser> searchUsers(
-            final Map<String, String> queryParams, final int startPage)
-            throws IOException {
-        if (queryParams == null)
-            throw new IllegalArgumentException("Params cannot be null"); //$NON-NLS-1$
-        if (queryParams.isEmpty())
-            throw new IllegalArgumentException("Params cannot be empty"); //$NON-NLS-1$
+            final Map<String, String> queryParams, final int startPage) throws IOException {
 
         StringBuilder query = new StringBuilder();
-        for (Map.Entry<String, String> param : queryParams.entrySet())
+        Set<Map.Entry<String,String>> queryParamEntries = getQueryParams(queryParams);
+        for (Map.Entry<String, String> param : queryParamEntries)
             query.append(param.getKey()).append(':').append(param.getValue())
                 .append(' ');
         return searchUsers(query.toString(), startPage);
+    }
+
+    private Set<Map.Entry<String,String>> getQueryParams(final Map<String, String> queryParams) throws IOException{
+
+        try {
+            if (queryParams == null)
+                throw new IllegalArgumentException("Params cannot be null"); //$NON-NLS-1$
+            if (queryParams.isEmpty())
+                throw new IllegalArgumentException("Params cannot be empty"); //$NON-NLS-1$
+        } catch (IllegalArgumentException e) {};
+
+        return queryParams.entrySet();
     }
 }
