@@ -48,6 +48,9 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 
+import com.github.mobile.HttpClient;
+import com.github.mobile.OkHttpClientWrapper;
+
 /**
  * Getter for an image
  */
@@ -269,11 +272,14 @@ public class HttpImageGetter implements ImageGetter {
         }
 
         try {
-            Request request = new Request.Builder().url(source).build();
-            OkHttpClient client = new OkHttpClient();
-            Response response = client.newCall(request).execute();
 
-            Bitmap bitmap = ImageUtils.getBitmap(response.body().bytes(), width, MAX_VALUE);
+
+            HttpClient client = new OkHttpClientWrapper();
+            client.setRequest(source);
+            client.setResponse();
+
+            Bitmap bitmap = ImageUtils.getBitmap(client.getResponseBytes(), width, MAX_VALUE);
+
             if (bitmap == null)
                 return loading.getDrawable(source);
             BitmapDrawable drawable = new BitmapDrawable(context.getResources(), bitmap);

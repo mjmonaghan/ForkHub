@@ -44,7 +44,6 @@ import org.eclipse.egit.github.core.service.GistService;
 import org.eclipse.egit.github.core.service.IssueService;
 import org.eclipse.egit.github.core.service.PullRequestService;
 
-import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
 import retrofit2.converter.moshi.MoshiConverterFactory;
 
@@ -76,9 +75,8 @@ public class GitHubModule extends AbstractModule {
     @Provides
     @Singleton
     Retrofit retrofit(Provider<GitHubAccount> accountProvider) {
-        OkHttpClient client = new OkHttpClient.Builder()
-                .addInterceptor(new RequestConfiguration(accountProvider))
-                .build();
+
+        OkHttpClientWrapper client = new OkHttpClientWrapper(accountProvider);
 
         Moshi converter = new Moshi.Builder()
                 .add(new DateAdapter())
@@ -86,7 +84,7 @@ public class GitHubModule extends AbstractModule {
 
         return new Retrofit.Builder()
                 .baseUrl("https://api.github.com/")
-                .client(client)
+                .client(client.getClient())
                 .addConverterFactory(MoshiConverterFactory.create(converter))
                 .build();
     }
