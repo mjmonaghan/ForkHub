@@ -19,6 +19,8 @@ import static java.lang.String.CASE_INSENSITIVE_ORDER;
 import android.content.Context;
 import android.os.AsyncTask;
 
+import com.github.mobile.DefaultFileCacheReader;
+import com.github.mobile.DefaultFileCacheWriter;
 import com.github.mobile.RequestReader;
 import com.github.mobile.RequestWriter;
 
@@ -68,7 +70,7 @@ public class RecentRepositories implements Comparator<Repository>, Serializable 
     }
 
     private void load() {
-        LinkedHashSet<Long> loaded = new RequestReader(file, VERSION).read();
+        LinkedHashSet<Long> loaded = new RequestReader(new DefaultFileCacheReader(file), VERSION).read();
         if (loaded == null)
             loaded = new LinkedHashSet<Long>();
         ids = loaded;
@@ -157,7 +159,7 @@ public class RecentRepositories implements Comparator<Repository>, Serializable 
     public RecentRepositories save() {
         final LinkedHashSet<Long> save = ids;
         if (save != null)
-            new RequestWriter(file, VERSION).write(save);
+            new RequestWriter(new DefaultFileCacheWriter(file), VERSION).write(save);
         return this;
     }
 

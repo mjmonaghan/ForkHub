@@ -22,6 +22,8 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.util.Log;
 
+import com.github.mobile.DefaultFileCacheReader;
+import com.github.mobile.DefaultFileCacheWriter;
 import com.github.mobile.RequestFuture;
 import com.github.mobile.RequestReader;
 import com.github.mobile.RequestWriter;
@@ -92,7 +94,7 @@ public class AccountDataManager {
     private <V> V read(final File file) {
         long start = System.currentTimeMillis();
         long length = file.length();
-        Object data = new RequestReader(file, FORMAT_VERSION).read();
+        Object data = new RequestReader(new DefaultFileCacheReader(file), FORMAT_VERSION).read();
         if (data != null)
             Log.d(TAG, MessageFormat.format(
                     "Cache hit to {0}, {1} ms to load {2} bytes",
@@ -109,7 +111,7 @@ public class AccountDataManager {
      * @return this manager
      */
     private AccountDataManager write(File file, Object data) {
-        new RequestWriter(file, FORMAT_VERSION).write(data);
+        new RequestWriter(new DefaultFileCacheWriter(file), FORMAT_VERSION).write(data);
         return this;
     }
 

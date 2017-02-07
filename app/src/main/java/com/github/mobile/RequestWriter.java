@@ -32,25 +32,22 @@ public class RequestWriter {
 
     private static final String TAG = "RequestWriter";
 
-    private final File handle;
+    CacheWriterInterface cache;
 
     private final int version;
 
     /**
      * Create a request writer that writes to the given file
      *
-     * @param file
+     * @param cache
      * @param formatVersion
      */
-    public RequestWriter(File file, int formatVersion) {
-        handle = file;
+    public RequestWriter(CacheWriterInterface cache, int formatVersion) {
+        this.cache = cache;
         version = formatVersion;
     }
 
-    private void createDirectory(final File dir) {
-        if (dir != null && !dir.exists())
-            dir.mkdirs();
-    }
+
 
     /**
      * Write request to file
@@ -59,39 +56,16 @@ public class RequestWriter {
      * @return request
      */
     public <V> V write(V request) {
-        RandomAccessFile dir = null;
-        FileLock lock = null;
-        ObjectOutputStream output = null;
+        ObjectOutputStream output = cache.open_write();
         try {
-            createDirectory(handle.getParentFile());
-            dir = new RandomAccessFile(handle, "rw");
-            lock = dir.getChannel().lock();
-            output = new ObjectOutputStream(new GZIPOutputStream(
-                    new FileOutputStream(dir.getFD()), 8192));
             output.writeInt(version);
             output.writeObject(request);
         } catch (IOException e) {
-            Log.d(TAG, "Exception writing cache " + handle.getName(), e);
+            Log.d(TAG, "Exception writing cache " + cache.getName(), e);
             return null;
-        } finally {
-            if (output != null)
-                try {
-                    output.close();
-                } catch (IOException e) {
-                    Log.d(TAG, "Exception closing stream", e);
-                }
-            if (lock != null)
-                try {
-                    lock.release();
-                } catch (IOException e) {
-                    Log.d(TAG, "Exception unlocking file", e);
-                }
-            if (dir != null)
-                try {
-                    dir.close();
-                } catch (IOException e) {
-                    Log.d(TAG, "Exception closing file", e);
-                }
+        }
+        finally {
+            cache.close_write();
         }
         return request;
     }
