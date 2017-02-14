@@ -23,6 +23,9 @@ import com.google.inject.Key;
 import com.google.inject.Module;
 import com.google.inject.OutOfScopeException;
 
+import com.github.mobile.MapFactory;
+
+
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -101,9 +104,9 @@ public class AccountScope extends ScopeBase {
 
         Map<Key<?>, Object> scopeMap = repoScopeMaps.get(account);
         if (scopeMap == null) {
-            scopeMap = new ConcurrentHashMap<Key<?>, Object>();
-            scopeMap.put(GITHUB_ACCOUNT_KEY, account);
-            repoScopeMaps.put(account, scopeMap);
+            MapFactory factory = new ScopeMapFactory();
+            factory.put(GITHUB_ACCOUNT_KEY, account);
+            repoScopeMaps.put(account, factory.getMap());
         }
         return scopeMap;
     }

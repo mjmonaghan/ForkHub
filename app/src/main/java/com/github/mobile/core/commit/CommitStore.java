@@ -87,6 +87,9 @@ public class CommitStore extends ItemStore {
     }
     //require:  commit that is not in store
     //ensure:  commit is added to list of repocommits then returns commit
+
+
+
     private RepositoryCommit createCommit(IRepositoryIdProvider repo,
                                           RepositoryCommit commit) {
         String repoId = repo.generateId();
@@ -98,6 +101,9 @@ public class CommitStore extends ItemStore {
         repoCommits.put(commit.getSha(), commit);
         return commit;
     }
+
+
+
 
     //require: commit that is in store
     //ensure: commit is updated and returned
