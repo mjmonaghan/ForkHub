@@ -22,13 +22,13 @@ import android.database.sqlite.SQLiteQueryBuilder;
 
 import com.google.inject.Inject;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-
 import org.eclipse.egit.github.core.User;
 import org.eclipse.egit.github.core.service.OrganizationService;
 import org.eclipse.egit.github.core.service.UserService;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Cache of organization under an account
