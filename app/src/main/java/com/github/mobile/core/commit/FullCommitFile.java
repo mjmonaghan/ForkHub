@@ -65,13 +65,17 @@ public class FullCommitFile {
         int line = comment.getPosition();
         if (line >= 0) {
             List<CommitComment> lineComments = comments.get(line);
-            if (lineComments == null) {
-                lineComments = new ArrayList<CommitComment>(4);
-                comments.put(line, lineComments);
-            }
+            lineComments = makeLazyLineComments(lineComments, line);
             lineComments.add(comment);
         }
         return this;
+    }
+
+    protected List<CommitComment> makeLazyLineComments(List<CommitComment> orig, int line)
+    {
+        List<CommitComment> lineComments = new ArrayList<CommitComment>(4);
+        comments.put(line, lineComments);
+        return lineComments;
     }
 
     /**
