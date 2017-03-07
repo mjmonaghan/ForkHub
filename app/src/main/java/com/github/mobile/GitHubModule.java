@@ -99,30 +99,42 @@ public class GitHubModule extends AbstractModule {
     IssueStore issueStore(IssueService issueService,
             PullRequestService pullService) {
         IssueStore store = issues != null ? issues.get() : null;
-        if (store == null) {
-            store = new IssueStore(issueService, pullService);
-            issues = new WeakReference<IssueStore>(store);
-        }
+        store = makeLazyIssueStore(store, issueService, pullService);
+        return store;
+    }
+
+    protected IssueStore makeLazyIssueStore(IssueStore orig, IssueService issueService, PullRequestService pullService)
+    {
+        IssueStore store = new IssueStore(issueService, pullService);
+        issues = new WeakReference<IssueStore>(store);
         return store;
     }
 
     @Provides
     GistStore gistStore(GistService service) {
         GistStore store = gists != null ? gists.get() : null;
-        if (store == null) {
-            store = new GistStore(service);
-            gists = new WeakReference<GistStore>(store);
-        }
+        store = makeLazyGistStore(store, service);
+        return store;
+    }
+
+    protected GistStore makeLazyGistStore(GistStore orig, GistService service)
+    {
+        GistStore store = new GistStore(service);
+        gists = new WeakReference<GistStore>(store);
         return store;
     }
 
     @Provides
     CommitStore commitStore(CommitService service) {
         CommitStore store = commits != null ? commits.get() : null;
-        if (store == null) {
-            store = new CommitStore(service);
-            commits = new WeakReference<CommitStore>(store);
-        }
+        store = makeLazyCommitStore(store, service);
+        return store;
+    }
+
+    protected CommitStore makeLazyCommitStore(CommitStore orig, CommitService service)
+    {
+        CommitStore store = new CommitStore(service);
+        commits = new WeakReference<CommitStore>(store);
         return store;
     }
 }

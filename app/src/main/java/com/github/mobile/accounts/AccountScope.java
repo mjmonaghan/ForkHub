@@ -95,6 +95,7 @@ public class AccountScope extends ScopeBase {
         currentAccount.remove();
     }
 
+
     @Override
     protected <T> Map<Key<?>, Object> getScopedObjectMap(final Key<T> key) {
         GitHubAccount account = currentAccount.get();

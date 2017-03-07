@@ -230,10 +230,14 @@ public class AccountDataManager {
     public void addIssueFilter(IssueFilter filter) {
         final File cache = new File(root, "issue_filters.ser");
         Collection<IssueFilter> filters = read(cache);
-        if (filters == null)
-            filters = new HashSet<IssueFilter>();
+        filters = makeLazyFilters(filters);
         if (filters.add(filter))
             write(cache, filters);
+    }
+
+    protected HashSet<IssueFilter> makeLazyFilters(Collection<IssueFilter> orig)
+    {
+        return new HashSet<IssueFilter>();
     }
 
     /**

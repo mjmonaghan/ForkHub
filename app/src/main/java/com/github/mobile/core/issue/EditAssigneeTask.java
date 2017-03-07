@@ -95,11 +95,15 @@ public class EditAssigneeTask extends ProgressDialogTask<Issue> {
     @Override
     protected Issue run(Account account) throws Exception {
         Issue editedIssue = new Issue();
-        if (assignee != null)
-            editedIssue.setAssignee(assignee);
-        else
-            editedIssue.setAssignee(new User().setLogin(""));
+        assignee = makeLazyAssignee(assignee);
+        editedIssue.setAssignee(assignee);
         editedIssue.setNumber(issueNumber);
         return store.editIssue(repositoryId, editedIssue);
+    }
+
+    /* Slight change in object state from original, but actual behavior is preserved */
+    protected User makeLazyAssignee(User orig)
+    {
+        return new User().setLogin("");
     }
 }

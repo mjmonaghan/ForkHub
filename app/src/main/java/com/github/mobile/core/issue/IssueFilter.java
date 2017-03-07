@@ -92,8 +92,7 @@ public class IssueFilter implements Serializable, Cloneable, Comparator<Label> {
     public IssueFilter addLabel(Label label) {
         if (label == null)
             return this;
-        if (labels == null)
-            labels = new TreeSet<Label>(this);
+        labels = makeLazyLabels(labels);
         labels.add(label);
         return this;
     }
@@ -104,14 +103,17 @@ public class IssueFilter implements Serializable, Cloneable, Comparator<Label> {
      */
     public IssueFilter setLabels(Collection<Label> labels) {
         if (labels != null && !labels.isEmpty()) {
-            if (this.labels == null)
-                this.labels = new TreeSet<Label>(this);
-            else
-                this.labels.clear();
+            this.labels = makeLazyLabels(this.labels);
+            this.labels.clear();
             this.labels.addAll(labels);
         } else
             this.labels = null;
         return this;
+    }
+
+    protected TreeSet<Label> makeLazyLabels(Set<Label> orig)
+    {
+        return new TreeSet<Label>(this);
     }
 
     /**

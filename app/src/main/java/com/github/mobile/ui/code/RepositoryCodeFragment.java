@@ -184,10 +184,14 @@ public class RepositoryCodeFragment extends DialogFragment implements
         if (tree == null)
             return;
 
-        if (dialog == null)
-            dialog = new RefDialog((DialogFragmentActivity) getActivity(),
-                    REF_UPDATE, repository, service);
+        dialog = makeLazyDialog(dialog);
         dialog.show(tree.reference);
+    }
+
+    protected RefDialog makeLazyDialog(RefDialog orig)
+    {
+        return new RefDialog((DialogFragmentActivity) getActivity(),
+                REF_UPDATE, repository, service);
     }
 
     @Override

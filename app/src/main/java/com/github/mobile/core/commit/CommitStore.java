@@ -94,15 +94,17 @@ public class CommitStore extends ItemStore {
                                           RepositoryCommit commit) {
         String repoId = repo.generateId();
         ItemReferences<RepositoryCommit> repoCommits = commits.get(repoId);
-        if (repoCommits == null) {
-            repoCommits = new ItemReferences<RepositoryCommit>();
-            commits.put(repoId, repoCommits);
-        }
+        repoCommits = makeLazyCommits(repoCommits, repoId);
         repoCommits.put(commit.getSha(), commit);
         return commit;
     }
 
-
+    protected ItemReferences<RepositoryCommit> makeLazyCommits(ItemReferences<RepositoryCommit> orig, String repoId)
+    {
+        ItemReferences<RepositoryCommit> repoCommits = new ItemReferences<RepositoryCommit>();
+        commits.put(repoId, repoCommits);
+        return repoCommits;
+    }
 
 
     //require: commit that is in store

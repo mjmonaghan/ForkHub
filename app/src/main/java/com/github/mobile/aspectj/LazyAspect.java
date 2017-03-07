@@ -7,8 +7,6 @@ import org.aspectj.lang.annotation.Pointcut;
 
 @Aspect
 class LazyAspect{
-
-
     @Pointcut("execution(* *..makeLazy*(..))")
     public void LazyPointcutRule(){}
 
@@ -19,5 +17,4 @@ class LazyAspect{
             point.proceed();
         }
     }
-
 }
