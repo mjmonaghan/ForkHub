@@ -43,6 +43,8 @@ import com.github.mobile.core.user.UserUriMatcher;
 import java.net.URI;
 import java.text.MessageFormat;
 import java.util.List;
+import java.lang.reflect.Method;
+import java.util.Objects;
 
 /**
  * Activity to launch other activities based on the intent's data {@link URI}
@@ -71,39 +73,45 @@ public class UriLauncherActivity extends Activity {
         return true;
     }
 
+
+
     static public Intent getIntentForURI(Uri data) {
-        List<String> segments = data.getPathSegments();
-        if (segments == null)
-            return null;
+        try {
+            Method[] intent_priorities =
+                    {
+                            CommitUriMatcher.class.getMethod("getCommitIntent", List.class),
+                            IssueUriMatcher.class.getMethod("getIssueIntent", List.class),
+                            RepositoryUriMatcher.class.getMethod("getRepositoryIntent", List.class),
+                            UserUriMatcher.class.getMethod("getUserIntent", List.class)
+                    };
 
-        Intent intent;
-        if (HOST_GISTS.equals(data.getHost())) {
-            intent = GistUriMatcher.getGistIntent(segments);
-            if (intent != null) {
-                return intent;
-            }
-        } else if (HOST_DEFAULT.equals(data.getHost())) {
-            intent = CommitUriMatcher.getCommitIntent(segments);
-            if (intent != null) {
-                return intent;
-            }
+            List<String> segments = data.getPathSegments();
+            if (segments == null)
+                return null;
 
-            intent = IssueUriMatcher.getIssueIntent(segments);
-            if (intent != null) {
-                return intent;
-            }
-
-            intent = RepositoryUriMatcher.getRepositoryIntent(segments);
-            if (intent != null) {
-                return intent;
-            }
-
-            intent = UserUriMatcher.getUserIntent(segments);
-            if (intent != null) {
-                return intent;
+            Intent intent;
+            if (HOST_GISTS.equals(data.getHost())) {
+                intent = GistUriMatcher.getGistIntent(segments);
+                if (intent != null) {
+                    return intent;
+                }
+            } else if (HOST_DEFAULT.equals(data.getHost())) {
+                Object[] p = new Object[1];
+                p[0] = segments;
+                for (Method m:intent_priorities)
+                {
+                    intent = (Intent)m.invoke(p);
+                    if (intent != null)
+                    {
+                        return intent;
+                    }
+                }
             }
         }
-
+        catch (Exception e)
+        {
+            return null;
+        }
         return null;
     }
 
