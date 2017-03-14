@@ -110,7 +110,7 @@ public class UriLauncherActivity extends Activity {
         }
         catch (Exception e)
         {
-            return null;
+            //Log non-recoverable exception
         }
         return null;
     }
