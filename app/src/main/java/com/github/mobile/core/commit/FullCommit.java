@@ -73,8 +73,9 @@ public class FullCommit extends ArrayList<CommitComment> implements
             files = new ArrayList<FullCommitFile>(rawFiles.size());
             if (hasComments) {
                 for (CommitFile file : rawFiles) {
+                    /*find size of files*/
                     Iterator<CommitComment> iterator = comments.iterator();
-                    FullCommitFile full = new FullCommitFile(file);
+                    FullCommitFile full = new FullCommitFile(file, "lookUp");
                     while (iterator.hasNext()) {
                         CommitComment comment = iterator.next();
                         if (file.getFilename().equals(comment.getPath())) {

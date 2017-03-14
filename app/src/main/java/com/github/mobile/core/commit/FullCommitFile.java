@@ -15,12 +15,15 @@
  */
 package com.github.mobile.core.commit;
 
+import android.annotation.SuppressLint;
 import android.util.SparseArray;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 
+import org.eclipse.egit.github.core.Commit;
 import org.eclipse.egit.github.core.CommitComment;
 import org.eclipse.egit.github.core.CommitFile;
 
@@ -29,9 +32,7 @@ import org.eclipse.egit.github.core.CommitFile;
  */
 public class FullCommitFile {
 
-    private final SparseArray<List<CommitComment>> comments = new SparseArray<List<CommitComment>>(
-            4);
-
+    private final SparseArray<List<CommitComment>> comments = new SparseArray<List<CommitComment>>(4);
     private final CommitFile file;
 
     /**
@@ -41,8 +42,17 @@ public class FullCommitFile {
      */
     public FullCommitFile(final CommitFile file) {
         this.file = file;
+
     }
 
+    public FullCommitFile(final CommitFile file, String flag) {
+        this.file = file;
+
+
+        if (flag.equals("lookUp")){
+            HashMap<Integer,CommitComment> comments = new HashMap<Integer,CommitComment>(4);
+        }
+    }
     /**
      * Get comments for line
      *
