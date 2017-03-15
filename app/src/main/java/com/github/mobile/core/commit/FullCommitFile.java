@@ -17,10 +17,11 @@ package com.github.mobile.core.commit;
 
 import android.annotation.SuppressLint;
 import android.util.SparseArray;
+import android.util.ArrayMap;
 
+import java.util.AbstractList;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 
 import org.eclipse.egit.github.core.Commit;
@@ -32,7 +33,9 @@ import org.eclipse.egit.github.core.CommitFile;
  */
 public class FullCommitFile {
 
-    private final SparseArray<List<CommitComment>> comments = new SparseArray<List<CommitComment>>(4);
+    private SparseArray<List<CommitComment>> commentsArray = new SparseArray<List<CommitComment>>(4);
+    private ArrayMap<Integer,List<CommitComment>> commentsMap;
+    boolean isSparse = true;
     private final CommitFile file;
 
     /**
@@ -43,6 +46,7 @@ public class FullCommitFile {
     public FullCommitFile(final CommitFile file) {
         this.file = file;
 
+
     }
 
     public FullCommitFile(final CommitFile file, String flag) {
@@ -50,7 +54,8 @@ public class FullCommitFile {
 
 
         if (flag.equals("lookUp")){
-            HashMap<Integer,CommitComment> comments = new HashMap<Integer,CommitComment>(4);
+            commentsMap = new ArrayMap<Integer,List<CommitComment>>(4);
+            isSparse = false;
         }
     }
     /**
@@ -60,7 +65,11 @@ public class FullCommitFile {
      * @return comments
      */
     public List<CommitComment> get(final int line) {
-        List<CommitComment> lineComments = comments.get(line);
+//   OLD     List<CommitComment> lineComments = comments.get(line);
+//   CODE    return lineComments != null ? lineComments : Collections
+//                .<CommitComment> emptyList();
+
+        List<CommitComment> lineComments = (isSparse) ? commentsArray.get(line) : commentsMap.get(line);
         return lineComments != null ? lineComments : Collections
                 .<CommitComment> emptyList();
     }
@@ -74,10 +83,15 @@ public class FullCommitFile {
     public FullCommitFile add(final CommitComment comment) {
         int line = comment.getPosition();
         if (line >= 0) {
-            List<CommitComment> lineComments = comments.get(line);
+            List<CommitComment> lineComments = (isSparse) ? commentsArray.get(line) : commentsMap.get(line);
             if (lineComments == null) {
                 lineComments = new ArrayList<CommitComment>(4);
-                comments.put(line, lineComments);
+                if (isSparse) {
+                    commentsArray.put(line, lineComments);
+                }
+                else {
+                    commentsMap.put(line,lineComments);
+                }
             }
             lineComments.add(comment);
         }
